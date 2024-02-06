@@ -195,11 +195,19 @@ namespace SignalR.DataAccessLayer.Migrations
 
             modelBuilder.Entity("SignalR.EntityLayer.Entities.Monial", b =>
                 {
-                    b.Property<int>("MonialID")
+                    b.Property<int>("monialID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MonialID"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("monialID"), 1L, 1);
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -212,7 +220,7 @@ namespace SignalR.DataAccessLayer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("MonialID");
+                    b.HasKey("monialID");
 
                     b.ToTable("Monials");
                 });
@@ -225,6 +233,9 @@ namespace SignalR.DataAccessLayer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductID"), 1L, 1);
 
+                    b.Property<int>("CategoryID")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -233,8 +244,8 @@ namespace SignalR.DataAccessLayer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("Price")
+                        .HasColumnType("int");
 
                     b.Property<string>("ProductName")
                         .IsRequired()
@@ -245,7 +256,25 @@ namespace SignalR.DataAccessLayer.Migrations
 
                     b.HasKey("ProductID");
 
+                    b.HasIndex("CategoryID");
+
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("SignalR.EntityLayer.Entities.Product", b =>
+                {
+                    b.HasOne("SignalR.EntityLayer.Entities.Category", "Category")
+                        .WithMany("Products")
+                        .HasForeignKey("CategoryID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("SignalR.EntityLayer.Entities.Category", b =>
+                {
+                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }

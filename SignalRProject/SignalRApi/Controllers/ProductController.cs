@@ -27,6 +27,14 @@ namespace SignalRApi.Controllers
             var value = _mapper.Map<List<ResultProductdto>>(_productService.TGetListAll());
             return Ok(value);
         }
+        [HttpGet("ProductListWithCategory")]
+        public IActionResult ProductListWithCategory() { 
+
+            var value = _mapper.Map<List<ResultProductWithCategory>>(_productService.TGetProductsWithCategories());
+            return Ok(value);
+
+
+        }
 
         [HttpPost]
         public IActionResult CreateProduct(CreateProductDto createProductDto)
@@ -63,17 +71,19 @@ namespace SignalRApi.Controllers
         }
 
         [HttpPut]
-        public IActionResult UpdateProduct(UpdateProductDto updateProductDto)
+        public IActionResult UpdateProduct(UpdateProductdto updateProductDto)
         {
             _productService.TUpdate(new Product()
             {
                 Description= updateProductDto.Description,
-
-
-
-
+                ImageUrl= updateProductDto.ImageUrl,
+                Price= updateProductDto.Price,
+                ProductName= updateProductDto.ProductName,
+                ProductID= updateProductDto.ProductID,
+                ProductStatus  = updateProductDto.ProductStatus,
+               
             });
-
+            return Ok(" ürünler güncellendi");
 
 
 
